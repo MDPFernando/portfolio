@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS public.profiles (
     bio_short TEXT NOT NULL,
     bio_long TEXT NOT NULL,
     photo_url TEXT NOT NULL,
+    logo_url TEXT,
     cv_url TEXT,
     location TEXT NOT NULL,
     timezone TEXT NOT NULL,

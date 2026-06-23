@@ -372,7 +372,7 @@ export default function AdminPage() {
     const isNew = !item.id;
     const projectItem = {
       ...item,
-      id: item.id || `p_${Date.now()}`,
+      id: item.id || crypto.randomUUID(),
       stars: item.stars || 0,
       sort_order: item.sort_order || 0
     } as ProjectData;
@@ -416,7 +416,7 @@ export default function AdminPage() {
     const isNew = !item.id;
     const skillItem = {
       ...item,
-      id: item.id || `s_${Date.now()}`,
+      id: item.id || crypto.randomUUID(),
       proficiency: item.proficiency || 80,
       radar_placement: item.radar_placement || "Trial"
     } as SkillData;
@@ -458,7 +458,7 @@ export default function AdminPage() {
     const isNew = !item.id;
     const expItem = {
       ...item,
-      id: item.id || `e_${Date.now()}`,
+      id: item.id || crypto.randomUUID(),
       tags: item.tags || []
     } as ExperienceData;
 
@@ -499,7 +499,7 @@ export default function AdminPage() {
     const isNew = !item.id;
     const certItem = {
       ...item,
-      id: item.id || `c_${Date.now()}`
+      id: item.id || crypto.randomUUID()
     } as CertificateData;
 
     let updatedList;
@@ -539,7 +539,7 @@ export default function AdminPage() {
     const isNew = !item.id;
     const postItem = {
       ...item,
-      id: item.id || `b_${Date.now()}`,
+      id: item.id || crypto.randomUUID(),
       slug: item.slug || item.title.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
       is_published: item.is_published !== undefined ? item.is_published : true,
       read_time: item.read_time || 5,
