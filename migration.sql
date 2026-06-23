@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS public.skills (
     category TEXT NOT NULL CHECK (category IN ('Frontend', 'Backend', 'Languages', 'Tools', 'Learning')),
     proficiency INTEGER NOT NULL CHECK (proficiency >= 0 AND proficiency <= 100),
     icon TEXT NOT NULL,
-    radar_placement TEXT NOT NULL CHECK (radar_placement IN ('Adopt', 'Trial', 'Assess', 'Hold')),
+    radar_placement TEXT NOT NULL CHECK (radar_placement IN ('Adopt', 'Trial', 'Assess', 'Hold', 'Learning')),
     sort_order INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
