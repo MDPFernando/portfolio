@@ -374,7 +374,12 @@ export default function AdminPage() {
       ...item,
       id: item.id || crypto.randomUUID(),
       stars: item.stars || 0,
-      sort_order: item.sort_order || 0
+      sort_order: item.sort_order || 0,
+      type: item.type || "web",
+      is_published: item.is_published !== undefined ? item.is_published : true,
+      is_featured: item.is_featured || false,
+      tech_stack: item.tech_stack || [],
+      images: item.images || []
     } as ProjectData;
 
     let updatedList;
