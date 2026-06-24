@@ -46,7 +46,7 @@ async function getPortfolioData() {
       .select("*")
       .eq("is_published", true)
       .order("sort_order", { ascending: true });
-    if (projData && projData.length > 0) {
+    if (projData) {
       projects = projData;
     }
   } catch (e) {
@@ -58,7 +58,7 @@ async function getPortfolioData() {
       .from("skills")
       .select("*")
       .order("sort_order", { ascending: true });
-    if (skillData && skillData.length > 0) {
+    if (skillData) {
       skills = skillData;
     }
   } catch (e) {
@@ -70,7 +70,7 @@ async function getPortfolioData() {
       .from("experience")
       .select("*")
       .order("sort_order", { ascending: true });
-    if (expData && expData.length > 0) {
+    if (expData) {
       experience = expData;
     }
   } catch (e) {
@@ -82,7 +82,7 @@ async function getPortfolioData() {
       .from("certificates")
       .select("*")
       .order("issue_date", { ascending: false });
-    if (certData && certData.length > 0) {
+    if (certData) {
       certificates = certData;
     }
   } catch (e) {
@@ -95,7 +95,7 @@ async function getPortfolioData() {
       .select("*")
       .eq("is_published", true)
       .order("created_at", { ascending: false });
-    if (postData && postData.length > 0) {
+    if (postData) {
       posts = postData;
     }
   } catch (e) {
