@@ -382,6 +382,27 @@ export default function AdminPage() {
       images: item.images || []
     } as ProjectData;
 
+    if (!isBypassMode) {
+      // Strip any base64 data URLs — Supabase cannot store them (too large)
+      const dbItem = {
+        ...projectItem,
+        images: projectItem.images.filter((img) => !img.startsWith("data:"))
+      };
+
+      const supabase = createBrowserClient(url, anonKey);
+      const { error } = await supabase.from("projects").upsert(dbItem);
+      if (error) {
+        logSystem(`Project sync error: ${error.message}`);
+        window.alert(`🚨 SYNC FAILED: ${error.message}\n\nTip: If you uploaded an image file, please paste a URL instead.`);
+        return; // Keep form open so user can fix it
+      } else {
+        window.alert("✅ NODE CACHED SUCCESSFULLY\n\nYour creation has been synchronized to the main interface.");
+      }
+    } else {
+      window.alert("✅ NODE CACHED LOCALLY (Bypass Mode)");
+    }
+
+    // Only update local state and close form after success
     let updatedList;
     if (isNew) {
       updatedList = [...projects, projectItem];
@@ -392,22 +413,8 @@ export default function AdminPage() {
     if (typeof window !== "undefined") {
       localStorage.setItem("local_projects", JSON.stringify(updatedList));
     }
-
     setEditingProject(null);
-    logSystem(`Project '${item.title}' successfully cached locally.`);
-
-    if (!isBypassMode) {
-      const supabase = createBrowserClient(url, anonKey);
-      const { error } = await supabase.from("projects").upsert(projectItem);
-      if (error) {
-        logSystem(`Project sync error: ${error.message}`);
-        window.alert(`🚨 SYNC FAILED: ${error.message}\nMake sure you are logged in properly.`);
-      } else {
-        window.alert("✅ NODE CACHED SUCCESSFULLY\n\nYour creation has been synchronized to the main interface.");
-      }
-    } else {
-      window.alert("✅ NODE CACHED LOCALLY (Bypass Mode)");
-    }
+    logSystem(`Project '${item.title}' successfully cached.`);
   };
 
   const deleteProject = async (id: string) => {
