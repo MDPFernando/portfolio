@@ -54,6 +54,13 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(true);
   const [consoleLogs, setConsoleLogs] = useState<string[]>(["Initializing System Console..."]);
 
+  // Toast notification state
+  const [toast, setToast] = useState<{ msg: string; type: "success" | "error" } | null>(null);
+  const showToast = (msg: string, type: "success" | "error" = "success") => {
+    setToast({ msg, type });
+    setTimeout(() => setToast(null), 4000);
+  };
+
   // Local collections state initialized with mockData
   const [errorMsg, setErrorMsg] = useState("");
   
@@ -393,13 +400,13 @@ export default function AdminPage() {
       const { error } = await supabase.from("projects").upsert(dbItem);
       if (error) {
         logSystem(`Project sync error: ${error.message}`);
-        window.alert(`🚨 SYNC FAILED: ${error.message}\n\nTip: If you uploaded an image file, please paste a URL instead.`);
+        showToast(`🚨 SYNC FAILED: ${error.message}`, "error");
         return; // Keep form open so user can fix it
       } else {
-        window.alert("✅ NODE CACHED SUCCESSFULLY\n\nYour creation has been synchronized to the main interface.");
+        showToast("✅ NODE CACHED — synced to main interface!");
       }
     } else {
-      window.alert("✅ NODE CACHED LOCALLY (Bypass Mode)");
+      showToast("✅ NODE CACHED LOCALLY (Bypass Mode)");
     }
 
     // Only update local state and close form after success
@@ -640,7 +647,20 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col md:flex-row relative overflow-hidden font-sans">
-      
+      {/* Toast Notification */}
+      {toast && (
+        <div
+          className={`fixed top-6 right-6 z-[9999] flex items-center gap-3 px-5 py-4 rounded-xl shadow-2xl border font-mono text-sm max-w-sm animate-pulse-once
+            ${toast.type === "error"
+              ? "bg-red-950/90 border-red-500/40 text-red-300"
+              : "bg-emerald-950/90 border-emerald-500/40 text-emerald-300"
+            }`}
+        >
+          <span className="text-lg">{toast.type === "error" ? "🚨" : "✅"}</span>
+          <span>{toast.msg}</span>
+        </div>
+      )}
+
       {/* Sidebar navigation */}
       <aside className="w-full md:w-64 border-b md:border-b-0 md:border-r border-surface-border bg-space-950/80 backdrop-blur-md flex flex-col justify-between p-6 z-10 shrink-0">
         <div className="space-y-8">
@@ -1080,8 +1100,21 @@ export default function AdminPage() {
                           onChange={async (e) => {
                             const file = e.target.files?.[0];
                             if (file) {
-                              const url = await handleFileUpload(file, "project");
-                              setEditingProject({ ...editingProject, images: [url] });
+                              logSystem(`Uploading image to Cloudinary: ${file.name}`);
+                              try {
+                                const fd = new FormData();
+                                fd.append("file", file);
+                                const res = await fetch("/api/upload", { method: "POST", body: fd });
+                                const data = await res.json();
+                                if (data.url) {
+                                  setEditingProject({ ...editingProject, images: [data.url] });
+                                  logSystem(`Image uploaded successfully: ${data.url}`);
+                                } else {
+                                  showToast("🚨 Image upload failed: " + data.error, "error");
+                                }
+                              } catch (err: any) {
+                                showToast("🚨 Image upload error: " + err.message, "error");
+                              }
                             }
                           }}
                           className="hidden"
