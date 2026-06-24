@@ -394,7 +394,14 @@ export default function AdminPage() {
     if (!isBypassMode) {
       const supabase = createBrowserClient(url, anonKey);
       const { error } = await supabase.from("projects").upsert(projectItem);
-      if (error) logSystem(`Project sync error: ${error.message}`);
+      if (error) {
+        logSystem(`Project sync error: ${error.message}`);
+        window.alert(`🚨 SYNC FAILED: ${error.message}\nMake sure you are logged in properly.`);
+      } else {
+        window.alert("✅ NODE CACHED SUCCESSFULLY\n\nYour creation has been synchronized to the main interface.");
+      }
+    } else {
+      window.alert("✅ NODE CACHED LOCALLY (Bypass Mode)");
     }
   };
 
@@ -407,7 +414,9 @@ export default function AdminPage() {
     logSystem(`Project node '${id}' removed.`);
     if (!isBypassMode) {
       const supabase = createBrowserClient(url, anonKey);
-      await supabase.from("projects").delete().eq("id", id);
+      const { error } = await supabase.from("projects").delete().eq("id", id);
+      if (error) window.alert(`🚨 DELETE FAILED: ${error.message}`);
+      else window.alert("🗑️ NODE PURGED\n\nProject has been removed from cloud.");
     }
   };
 
@@ -436,7 +445,13 @@ export default function AdminPage() {
 
     if (!isBypassMode) {
       const supabase = createBrowserClient(url, anonKey);
-      await supabase.from("skills").upsert(skillItem);
+      const { error } = await supabase.from("skills").upsert(skillItem);
+      if (error) {
+        logSystem(`Skill sync error: ${error.message}`);
+        window.alert(`🚨 SYNC FAILED: ${error.message}`);
+      } else {
+        window.alert("✅ RADAR UPDATED\n\nSkill node has been synchronized.");
+      }
     }
   };
 
@@ -449,7 +464,9 @@ export default function AdminPage() {
     logSystem(`Skill node '${id}' removed.`);
     if (!isBypassMode) {
       const supabase = createBrowserClient(url, anonKey);
-      await supabase.from("skills").delete().eq("id", id);
+      const { error } = await supabase.from("skills").delete().eq("id", id);
+      if (error) window.alert(`🚨 DELETE FAILED: ${error.message}`);
+      else window.alert("🗑️ NODE PURGED\n\nSkill has been removed from cloud.");
     }
   };
 
@@ -477,7 +494,13 @@ export default function AdminPage() {
 
     if (!isBypassMode) {
       const supabase = createBrowserClient(url, anonKey);
-      await supabase.from("experience").upsert(expItem);
+      const { error } = await supabase.from("experience").upsert(expItem);
+      if (error) {
+        logSystem(`Experience sync error: ${error.message}`);
+        window.alert(`🚨 SYNC FAILED: ${error.message}`);
+      } else {
+        window.alert("✅ HISTORY LOGGED\n\nExperience record has been synchronized.");
+      }
     }
   };
 
@@ -490,7 +513,9 @@ export default function AdminPage() {
     logSystem(`Experience node '${id}' removed.`);
     if (!isBypassMode) {
       const supabase = createBrowserClient(url, anonKey);
-      await supabase.from("experience").delete().eq("id", id);
+      const { error } = await supabase.from("experience").delete().eq("id", id);
+      if (error) window.alert(`🚨 DELETE FAILED: ${error.message}`);
+      else window.alert("🗑️ NODE PURGED\n\nExperience entry has been removed.");
     }
   };
 
@@ -517,7 +542,13 @@ export default function AdminPage() {
 
     if (!isBypassMode) {
       const supabase = createBrowserClient(url, anonKey);
-      await supabase.from("certificates").upsert(certItem);
+      const { error } = await supabase.from("certificates").upsert(certItem);
+      if (error) {
+        logSystem(`Certificate sync error: ${error.message}`);
+        window.alert(`🚨 SYNC FAILED: ${error.message}`);
+      } else {
+        window.alert("✅ CREDENTIAL VALIDATED\n\nCertificate entry has been synchronized.");
+      }
     }
   };
 
@@ -530,7 +561,9 @@ export default function AdminPage() {
     logSystem(`Certificate node '${id}' removed.`);
     if (!isBypassMode) {
       const supabase = createBrowserClient(url, anonKey);
-      await supabase.from("certificates").delete().eq("id", id);
+      const { error } = await supabase.from("certificates").delete().eq("id", id);
+      if (error) window.alert(`🚨 DELETE FAILED: ${error.message}`);
+      else window.alert("🗑️ NODE PURGED\n\nCertificate has been removed.");
     }
   };
 
@@ -561,7 +594,13 @@ export default function AdminPage() {
 
     if (!isBypassMode) {
       const supabase = createBrowserClient(url, anonKey);
-      await supabase.from("blog_posts").upsert(postItem);
+      const { error } = await supabase.from("blog_posts").upsert(postItem);
+      if (error) {
+        logSystem(`Blog sync error: ${error.message}`);
+        window.alert(`🚨 SYNC FAILED: ${error.message}`);
+      } else {
+        window.alert("✅ TRANSMISSION BROADCASTED\n\nJournal post has been synchronized.");
+      }
     }
   };
 
