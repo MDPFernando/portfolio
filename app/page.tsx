@@ -15,8 +15,8 @@ import {
 
 import HolographicBackground from "@/components/ui/HolographicBackground";
 
-// Enable incremental static regeneration (ISR) every 1 hour (3600 seconds)
-export const revalidate = 3600;
+// Disable caching so admin updates reflect instantly
+export const revalidate = 0;
 
 async function getPortfolioData() {
   const supabase = createClientServer();

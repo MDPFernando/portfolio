@@ -25,47 +25,7 @@ interface PortfolioClientWrapperProps {
 }
 
 export default function PortfolioClientWrapper({ initialData }: PortfolioClientWrapperProps) {
-  const [data, setData] = useState(initialData);
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const localProfile = localStorage.getItem("local_profile");
-      const localProjects = localStorage.getItem("local_projects");
-      const localSkills = localStorage.getItem("local_skills");
-      const localExperience = localStorage.getItem("local_experience");
-      const localCertificates = localStorage.getItem("local_certificates");
-      const localPosts = localStorage.getItem("local_posts");
-
-      const updated = { ...initialData };
-      
-      try {
-        if (localProfile) updated.profile = JSON.parse(localProfile);
-        if (localProjects) {
-          // Merge: use localStorage overrides but fall back to initialData fields
-          // so new fields added to mockData (like demo_url) are never lost
-          const cachedProjects: any[] = JSON.parse(localProjects);
-          updated.projects = initialData.projects.map((base: any) => {
-            const cached = cachedProjects.find((c: any) => c.id === base.id);
-            return cached ? { ...base, ...cached } : base;
-          });
-          // Also append any cached projects not in initialData
-          cachedProjects.forEach((c: any) => {
-            if (!updated.projects.find((p: any) => p.id === c.id)) {
-              updated.projects.push(c);
-            }
-          });
-        }
-        if (localSkills) updated.skills = JSON.parse(localSkills);
-        if (localExperience) updated.experience = JSON.parse(localExperience);
-        if (localCertificates) updated.certificates = JSON.parse(localCertificates);
-        if (localPosts) updated.posts = JSON.parse(localPosts);
-      } catch (err) {
-        console.error("Failed to parse local sandbox cache:", err);
-      }
-
-      setData(updated);
-    }
-  }, [initialData]);
+  const data = initialData;
 
   return (
     <>
